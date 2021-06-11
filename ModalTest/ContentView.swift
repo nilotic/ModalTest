@@ -9,32 +9,39 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @State private var showingSheet = false
+    // MARK: - Value
+    // MARK: Private
+    @State private var isPresented = false
 
+    
+    // MARK: - View
+    // MARK: Public
     var body: some View {
         ZStack {
-            Button("Show Sheet") {
+            Button("Show View") {
                 withAnimation(.spring(response: 0.38, dampingFraction: 1, blendDuration: 0)) {
-                    showingSheet.toggle()
+                    isPresented = true
                 }
             }
             .padding(.bottom, 250)
             
-            if showingSheet {
+            if isPresented {
                 dimView
-                DetailView()
+                DetailView(isPresented: $isPresented)
             }
         }
     }
+     
     
-        
+    // MARK: - Value
+    // MARK: Private
     private var dimView: some View {
         Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.2990459033))
             .ignoresSafeArea()
             .transition(.opacity)
             .onTapGesture {
                 withAnimation {
-                    showingSheet = false
+                    isPresented = false
                 }
             }
     }
