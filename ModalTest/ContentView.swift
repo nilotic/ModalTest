@@ -11,8 +11,9 @@ struct ContentView: View {
 
     // MARK: - Value
     // MARK: Private
-    @State private var isPresented = false
-
+    @State private var settings = [String: Any]()
+    @State private var cache: [String: Any]? = nil
+    
     
     // MARK: - View
     // MARK: Public
@@ -20,14 +21,18 @@ struct ContentView: View {
         ZStack {
             Button("Show View") {
                 withAnimation(.spring(response: 0.38, dampingFraction: 1, blendDuration: 0)) {
-                    isPresented = true
+                    cache = settings
                 }
             }
             .padding(.bottom, 250)
             
-            if isPresented {
+            if let settings = cache {
                 dimView
-                DetailView(isPresented: $isPresented)
+                
+                SettingsView(setttings: settings) {
+                    self.settings = $0
+                    self.cache = nil
+                }
             }
         }
     }
@@ -41,15 +46,19 @@ struct ContentView: View {
             .transition(.opacity)
             .onTapGesture {
                 withAnimation {
-                    isPresented = false
+                    cache = nil
                 }
             }
     }
 }
 
+
+#if DEBUG
 struct ContentView_Previews: PreviewProvider {
+    
     static var previews: some View {
         ContentView()
             .preferredColorScheme(.dark)
     }
 }
+#endif

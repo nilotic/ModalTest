@@ -7,11 +7,12 @@
 
 import SwiftUI
 
-struct DetailView: View {
+struct SettingsView: View {
     
     // MARK: - Value
     // MARK: Public
-    @Binding var isPresented: Bool
+    var setttings: [String: Any]
+    var completion: ((_ settings: [String: Any]) -> Void)? = nil
     
     // MARK: Private
     @State private var offset: CGFloat = 0
@@ -24,15 +25,12 @@ struct DetailView: View {
             .onEnded { value in
                 let velocity = value.predictedEndLocation.y - value.location.y
                 let ratio = offset / 370
+                
                 print("\(velocity) \(ratio)")
+                
                 if 60 < velocity || 0.3...1.2 ~= ratio {
-                    withAnimation(.spring(response: 1)) {
-                        offset = UIScreen.main.bounds.height
-                        isPresented = false
-                    }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        offset = 0
+                    withAnimation {
+                        completion?([:])
                     }
                     
                 } else {
@@ -78,9 +76,12 @@ struct DetailView: View {
     }
 }
 
-struct DetailView_Previews: PreviewProvider {
+#if DEBUG
+struct SettingsView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        DetailView(isPresented: .constant(true))
+        SettingsView(setttings: [:])
             .preferredColorScheme(.dark)
     }
 }
+#endif
