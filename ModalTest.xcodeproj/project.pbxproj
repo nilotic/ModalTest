@@ -13,6 +13,7 @@
 		B7343F652672E8910002A412 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7343F642672E8910002A412 /* Preview Assets.xcassets */; };
 		B7343F6F2672EBE30002A412 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7343F6E2672EBE30002A412 /* SettingsView.swift */; };
 		B7343F712672F75A0002A412 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7343F702672F75A0002A412 /* RoundedCorner.swift */; };
+		B7843FD52680722A0021719A /* SettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7843FD42680722A0021719A /* SettingsData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		B7343F662672E8910002A412 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B7343F6E2672EBE30002A412 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		B7343F702672F75A0002A412 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
+		B7843FD42680722A0021719A /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +60,7 @@
 			children = (
 				B7343F5D2672E8900002A412 /* ModalTestApp.swift */,
 				B7343F5F2672E8900002A412 /* ContentView.swift */,
-				B7343F6E2672EBE30002A412 /* SettingsView.swift */,
+				B7843FD32680721F0021719A /* Settings */,
 				B7343F702672F75A0002A412 /* RoundedCorner.swift */,
 				B7343F612672E8910002A412 /* Assets.xcassets */,
 				B7343F662672E8910002A412 /* Info.plist */,
@@ -73,6 +75,15 @@
 				B7343F642672E8910002A412 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B7843FD32680721F0021719A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				B7343F6E2672EBE30002A412 /* SettingsView.swift */,
+				B7843FD42680722A0021719A /* SettingsData.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -146,6 +157,7 @@
 			files = (
 				B7343F712672F75A0002A412 /* RoundedCorner.swift in Sources */,
 				B7343F602672E8900002A412 /* ContentView.swift in Sources */,
+				B7843FD52680722A0021719A /* SettingsData.swift in Sources */,
 				B7343F6F2672EBE30002A412 /* SettingsView.swift in Sources */,
 				B7343F5E2672E8900002A412 /* ModalTestApp.swift in Sources */,
 			);

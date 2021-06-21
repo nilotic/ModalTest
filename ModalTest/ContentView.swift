@@ -29,7 +29,7 @@ struct ContentView: View {
             if let settings = cache {
                 dimView
                 
-                SettingsView(setttings: settings) {
+                SettingsView(settings: settings) {
                     self.settings = $0
                     self.cache = nil
                 }
