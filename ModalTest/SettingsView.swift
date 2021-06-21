@@ -16,26 +16,85 @@ struct SettingsView: View {
     
     // MARK: Private
     @State private var offset: CGFloat = 0
+    @State private var cornerRadius: CGFloat = 30
+    private let height: CGFloat = 370
+    private let compactHeight: CGFloat = 80
+    @State private var startLocationY: CGFloat = 0
+    @State private var delta: CGFloat = 0
+    @State private var isDragging = false
+    @State private var padding: CGFloat = 30
     
     private var gesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged {
-                offset = $0.location.y - $0.startLocation.y
+                let ratio = 1 - (offset / (height - compactHeight))
+                print("\($0.location.y) \(startLocationY)")
+                
+                switch isDragging {
+                case false:
+                    isDragging.toggle()
+                    if offset == 0  {
+                        startLocationY = $0.startLocation.y
+                        
+                    } else {
+                        delta = offset - ($0.startLocation.y - startLocationY)
+                        print("\(offset) \($0.startLocation.y) \($0.location.y) \(delta)")
+                    }
+                    
+                    
+                case true:
+                    break
+                }
+                
+                offset       = $0.location.y - startLocationY + delta
+                cornerRadius = min(max(0, ratio), 1) * 30
+                padding      = min(max(0, ratio), 1) * 30
+ 
             }
             .onEnded { value in
+                isDragging = false
+                
                 let velocity = value.predictedEndLocation.y - value.location.y
-                let ratio = offset / 370
+                let ratio = offset / height
                 
                 print("\(velocity) \(ratio)")
                 
-                if 60 < velocity || 0.3...1.2 ~= ratio {
-                    withAnimation {
-                        completion?([:])
+                if ratio <= 0.5 {
+                    if 60 < velocity {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.78)) {
+                            offset       = height - compactHeight
+                            cornerRadius = 0
+                            padding      = 0
+                        }
+                        
+                    } else {
+                        withAnimation(.spring(response: 0.5)) {
+                            offset         = 0
+                            cornerRadius   = 30
+                            padding        = 30
+                            
+                            delta          = 0
+                            startLocationY = 0
+                        }
                     }
-                    
+                
                 } else {
-                    withAnimation(.spring(response: 0.5)) {
-                        offset = 0
+                    if velocity < -60 {
+                        withAnimation(.spring(response: 0.28, dampingFraction: 0.8)) {
+                            offset         = 0
+                            cornerRadius   = 30
+                            padding        = 30
+                            
+                            delta          = 0
+                            startLocationY = 0
+                        }
+                        
+                    } else {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            offset       = height - compactHeight
+                            cornerRadius = 0
+                            padding      = 0
+                        }
                     }
                 }
             }
@@ -46,28 +105,50 @@ struct SettingsView: View {
     // MARK: Public
     var body: some View {
         GeometryReader { proxy in
-            VStack(alignment: .center) {
+            VStack(alignment: .center, spacing: 0) {
                 Spacer()
                     .frame(maxHeight: .infinity)
                 
-                VStack {
-                    Color.gray
-                        .frame(width: proxy.size.width / 3, height: 8)
-                        .cornerRadius(4)
-                        .padding(.vertical, 20)
-                        .contentShape(Rectangle())
-                        .gesture(gesture)
+                VStack(spacing: 0) {
+                    HStack{
+                        Spacer()
+                            .frame(width: 28, height: 28)
+                            .padding()
                         
+                        Spacer()
                         
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color(#colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1)))
-                            .padding(EdgeInsets(top: 10, leading: 40, bottom: 40, trailing: 40))
+                        Color.gray
+                            .frame(width: proxy.size.width / 3, height: 8)
+                            .cornerRadius(4)
+                            .padding(.vertical, 20)
+                            .contentShape(Rectangle())
+                            .gesture(gesture)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            withAnimation {
+                                completion?([:])
+                            }
+                            
+                        }) {
+                            Image(systemName: "xmark.circle")
+                                .resizable()
+                                .frame(width: 28, height: 28)
+                                .foregroundColor(.black)
+                        }
+                        .padding()
                     }
-                    .frame(height: 370)
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .fill(Color(#colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1)))
+                            .padding(EdgeInsets(top: 0, leading: padding, bottom: padding, trailing: padding))
+                    }
+                    .frame(height: height)
                 }
                 .background(Color.white)
-                .cornerRadius(30)
+                .cornerRadius(cornerRadius)
                 .offset(y: offset)
             }
             .ignoresSafeArea()
