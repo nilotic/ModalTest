@@ -18,7 +18,7 @@ final class SettingsData: ObservableObject {
     @Published var isDragging = false
     @Published var padding: CGFloat = 30
     
-    let height: CGFloat = 370
+    let height: CGFloat = 670
     let compactHeight: CGFloat = 80
     
     var setttings = [String: Any]()
