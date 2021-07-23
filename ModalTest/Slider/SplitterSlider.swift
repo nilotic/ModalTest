@@ -15,7 +15,7 @@ struct SplitterSlider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFlo
     private let bounds: ClosedRange<V>
     private let step: V.Stride
     
-    private let length: CGFloat    = 50
+    private let length: CGFloat    = 40
     private let lineWidth: CGFloat = 2
     
     @State private var ratio: CGFloat   = 0
@@ -48,14 +48,11 @@ struct SplitterSlider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFlo
                         .modifier(MathSymbolModifier(ratio: ratio))
                         .offset(x: (proxy.size.width - length) * ratio)
                         .gesture(DragGesture(minimumDistance: 0)
-                                    .onChanged({ updateStatus(value: $0, proxy: proxy) })
-                                    .onEnded { _ in startX = nil })
-                    
-                    
-                    
+                                    .onChanged { updateStatus(value: $0, proxy: proxy) }
+                                    .onEnded { updateStatus(value: $0, proxy: proxy, isEnded: true) })
                 }
             }
-            .frame(height: length)
+            .frame(height: proxy.size.height)
             .simultaneousGesture(DragGesture(minimumDistance: 0)
                                     .onChanged({ update(value: $0, proxy: proxy) }))
             .onAppear {
@@ -64,17 +61,25 @@ struct SplitterSlider<V>: View where V: BinaryFloatingPoint, V.Stride: BinaryFlo
         }
     }
     
-    // MARK: Private
-    
     
     
     // MARK: - Function
     // MARK: Private
-    private func updateStatus(value: DragGesture.Value, proxy: GeometryProxy) {
-        guard startX == nil else { return }
+    private func updateStatus(value: DragGesture.Value, proxy: GeometryProxy, isEnded: Bool = false) {
+        switch isEnded {
+        case false:
+            guard startX == nil else { return }
+            
+            let delta = value.startLocation.x - (proxy.size.width - length) * ratio
+            startX = (length < value.startLocation.x && 0 < delta) ? delta : value.startLocation.x
         
-        let delta = value.startLocation.x - (proxy.size.width - length) * ratio
-        startX = (length < value.startLocation.x && 0 < delta) ? delta : value.startLocation.x
+        case true:
+            startX = nil
+            
+            withAnimation(.easeInOut(duration: 0.3)) {
+                ratio = ratio <= 0.5 ? 0 : 1
+            }
+        }
     }
     
     private func update(value: DragGesture.Value, proxy: GeometryProxy) {

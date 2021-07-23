@@ -42,7 +42,7 @@ struct MathSymbolModifier: AnimatableModifier {
         
         content
             .foregroundColor(foregroundColor)
-            .shadow(color: .white, radius: 7)
+            .shadow(color: .gray, radius: 3)
             .overlay(
                 GeometryReader { proxy in
                     ZStack {
@@ -63,22 +63,7 @@ struct MathSymbolModifier: AnimatableModifier {
                                 .padding(.top, proxy.size.width / 3)
                                 .rotationEffect(Angle(radians: Double(ratio) * .pi / 4))
                                 .opacity(Double(1 - ratio))
-                            /*
-                            RoundedRectangle(cornerRadius: (length / 2) - (length - width) / 2 * ratio)
-                                .frame(width: length + (proxy.size.width / 4 - length) * ratio, height: length - (length - width) * ratio)
-                                .padding(.bottom, proxy.size.width / 3)
-                                .rotationEffect(Angle(radians: Double(ratio) * .pi / -4), anchor: .topTrailing)
-                                .offset(x: width * ratio, y: -width / length * ratio)
-                            
-                            RoundedRectangle(cornerRadius: (length / 2) - (length - width) / 2 * ratio)
-                                .frame(width: length + (proxy.size.width / 4 - length) * ratio, height: length - (length - width) * ratio)
-                                .padding(.top, proxy.size.width / 3)
-                                .rotationEffect(Angle(radians: Double(ratio) * .pi / -4), anchor: .bottomLeading)
-                                .offset(x: -width * ratio, y: width / length * ratio)
-                            */
-                            
-                            
-                                
+                         
                             RoundedRectangle(cornerRadius: ratio)
                                 .frame(width: proxy.size.width / 2 * ratio, height: 2)
                                 .rotationEffect(Angle(radians: Double(.pi / 2 + (.pi / 4 * ratio))))
